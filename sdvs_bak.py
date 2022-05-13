@@ -34,7 +34,6 @@ class strm:
                 "video/x-raw, format=(string)BGR ! "
             "appsink"
         )
-        # Complete the function body
         self.cap = cv2.VideoCapture(pipeline, cv2.CAP_GSTREAMER)
 
     def gstreamer_camera(self):
@@ -42,18 +41,17 @@ class strm:
 
         try:
             while True:
-                print("new iter")
                 ret, frame = self.cap.read()
                 if not ret:
-                    print("??????/")
+                    print("Stop!!!")
                     self.doing = False
                     break
+                # print("Getting frame")
                 # enqueue frame to buffer
                 self.buff.appendleft(frame)
-                print(time.strftime('%X'), frame.shape)
 
         except KeyboardInterrupt as e:
-            print("fuck")
+            print("Force stop!!!")
             self.cap.release()
         pass
 
@@ -72,9 +70,6 @@ class strm:
             "flvmux ! "
             'rtmpsink location="rtmp://localhost/rtmp/live live=1"'
         )
-        # print(type(pipeline))
-        # Complete the function body
-        # fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
         w = self.cap.get(cv2.CAP_PROP_FRAME_WIDTH)
         h = self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
         fps = self.cap.get(cv2.CAP_PROP_FPS)
@@ -83,12 +78,9 @@ class strm:
             try:
                 if not self.doing:
                     break
-                # if not len(q): continue
-                # frame = q.get()
                 if not len(self.buff): continue
                 assert len(self.buff) <= 1
-                print("doing")
-                # frame = self.buff.pop(0)
+                # print("Writing frame")
                 frame = self.buff.pop()
                 mode = None
                 # read mode from file
@@ -122,28 +114,18 @@ class strm:
                                 mp_hands.HAND_CONNECTIONS,
                                 mp_drawing_styles.get_default_hand_landmarks_style(),
                                 mp_drawing_styles.get_default_hand_connections_style())
-                # B, G, R = cv2.split(frame)
-                # frame = cv2.merge([R, R, R])
+                            
                 out.write(frame)
-                print(time.strftime('%X'), frame.shape)
-                # greystyle
-                # frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-                out.write(frame)
-            except:
-                print("saf")
-                pass
-    # You can apply some simple computer vision algorithm here
+            except Exception as e:
+                print("error when writing")
+                print(e)
 
     def start(self):
         self.receive_video_thread = Thread(target = self.gstreamer_camera)
-        # self.receive_video_thread.setDaemon(True) # auto terminated with process
         self.receive_video_thread.start()
 
         self.save_video_thread = Thread(target = self.gstreamer_rtmpstream)
-        # self.save_video_thread = Thread(target = self.test)
-        # self.save_video_thread.setDaemon(True) # auto terminated with process
         self.save_video_thread.start()
-
 
 def main(mode=None):
     # write mode into a file for future access
@@ -159,10 +141,3 @@ def main(mode=None):
 
 if __name__ == '__main__':
     main('0')
-# if __name__ == '__main__':
-#     pls = strm()
-#     pls.start()
-
-
-# Complelte the code
-
