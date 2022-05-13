@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+service ModeChanger {
+    rpc Compute(ModeRequest) returns (ModeResponse);
+}
+
+message ModeRequest {
+    string mode = 1;
+}
+
+message ModeResponse {
+    string result = 1;
+}
