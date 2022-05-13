@@ -4,7 +4,9 @@
 
 
 ## Demo
-<https://www.youtube.com/watch?v=1w_JFab4DJw>
+[youtube](https://www.youtube.com/watch?v=1w_JFab4DJw)
+
+![](resources/demo.webp)
 
 ## How to Run
 Download the code to your Jetson Nano
