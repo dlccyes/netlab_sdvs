@@ -65,7 +65,11 @@ For example, to enable real-time face detection, do
 python3 client.py --ip <Jetson Nano IP> --port 8080 --mode hand
 ```
 
-
+To disable algorithm, do
+```
+# on local computer
+python3 client.py --ip <Jetson Nano IP> --port 8080 --mode clear
+```
 
 ## Troubleshooting
 ### `opening in BLOCKING MODE` Error

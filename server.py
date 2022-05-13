@@ -20,14 +20,16 @@ class ModeChangerServicer(mode_pb2_grpc.ModeChangerServicer):
     def Compute(self, request, context):
         mode = request.mode
         response = mode_pb2.ModeResponse()
-        if mode in {'hand', 'object', 'face'}:
-            response.result = f"changing mode to {mode}"
-        elif mode == '0':
-            response.result = "starting stream"
-        else:
+        if mode not in {'0', 'grey', 'clear', 'hand', 'object', 'face'}:
             response.result = "invalid mode"
-
-        sdvs.main(mode)
+        else:
+            if mode == 'clear':
+                response.result = "change to no algo"
+            elif mode == '0':
+                response.result = "starting stream"
+            else:
+                response.result = f"changing mode to {mode}"
+            sdvs.main(mode)
 
         return response
 
